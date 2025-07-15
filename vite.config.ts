@@ -7,8 +7,15 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    ],
-    define: {
-      global: 'globalThis',
+  ],
+  define: {
+    global: 'globalThis',
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
     }
+  }
 })
