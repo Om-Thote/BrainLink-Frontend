@@ -1,4 +1,5 @@
 import { Logo } from "../icons/Logo";
+import { Link } from "react-router-dom";
 
 export function Landing() {
   return <div className="bg-gradient-to-br from-purple-700 via-purple-500 via-pink-500 to-purple-300 min-h-screen w-screen">
@@ -17,12 +18,12 @@ export function Landing() {
       </div>
 
       <div className="flex space-x-4">
-        <a href="/signin" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition-colors">
+        <Link to="/signin" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition-colors">
           Sign In
-        </a>
-        <a href="/signup" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition-colors">
+        </Link>
+        <Link to="/signup" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition-colors">
           Sign Up
-        </a>
+        </Link>
       </div>
     </div>
 
@@ -42,9 +43,9 @@ export function Landing() {
       <div> and ready to explore. Your second brain, amplified. </div>
     </div>
     <div className="pt-8 mx-8 ">
-      <a href="/signup" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition-colors">
+      <Link to="/signup" className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition-colors">
         Start Now
-      </a>
+      </Link>
     </div>
     <div id="features" className="h-96 bg-white/10 backdrop-blur-sm border border-white/20 mt-16 p-8 mx-8 rounded-xl">
       <h2 className="text-4xl text-white font-bold mb-8 text-center">Features</h2>
