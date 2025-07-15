@@ -33,7 +33,7 @@ export function Dashboard() {
     setError("");
 
     try {
-      const response = await axios.delete(`${BACKEND_URL}/api/v1/content`, {
+      await axios.delete(`${BACKEND_URL}/api/v1/content`, {
         headers: {
           "Authorization": localStorage.getItem("token")
         },
