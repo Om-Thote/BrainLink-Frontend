@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && cp public/_redirects dist/",
+    "build": "tsc -b && vite build && echo '/*    /index.html   200' > dist/_redirects",
     "lint": "eslint .",
     "preview": "vite preview",
     "tailwind-init": "tailwindcss init -p"
