@@ -3,6 +3,7 @@ import { Signup } from "./pages/Signup"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Dashboard } from "./pages/dashboard"
 import { Landing } from "./pages/landing"
+import { SharedBrain } from "./pages/SharedBrain"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/share/:hash" element={<SharedBrain />} />
       </Routes>
     </BrowserRouter>
   )
