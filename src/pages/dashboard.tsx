@@ -9,6 +9,40 @@ import { useContent } from "../hooks/useContent"
 import { BACKEND_URL } from "../config"
 import axios from "axios"
 
+// Robust clipboard function with fallback
+const copyToClipboard = async (text: string): Promise<boolean> => {
+  // Try modern clipboard API first
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (err) {
+      console.warn('Clipboard API failed, falling back to legacy method');
+    }
+  }
+
+  // Fallback for older browsers or non-secure contexts
+  try {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    textArea.style.top = '-999px';
+    textArea.style.left = '-999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    const successful = document.execCommand('copy');
+    document.body.removeChild(textArea);
+
+    return successful;
+  } catch (err) {
+    console.error('Fallback clipboard method failed:', err);
+    return false;
+  }
+};
+
 export function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [sharedBrainHash, setSharedBrainHash] = useState<string | null>(null);
@@ -81,8 +115,15 @@ export function Dashboard() {
       const shareUrl = `${window.location.origin}/share/${response.data.hash}`;
       setSharedBrainHash(response.data.hash);
 
-      await navigator.clipboard.writeText(shareUrl);
-      alert(`Brain shared! Link copied to clipboard: ${shareUrl}`);
+      // Use the robust clipboard function
+      const clipboardSuccess = await copyToClipboard(shareUrl);
+
+      if (clipboardSuccess) {
+        alert(`Brain shared! Link copied to clipboard: ${shareUrl}`);
+      } else {
+        // Show the URL to user if clipboard fails
+        alert(`Brain shared! Please copy this link manually: ${shareUrl}`);
+      }
     } catch (error: any) {
       console.error("Failed to share brain:", error);
 
@@ -110,11 +151,16 @@ export function Dashboard() {
         return;
       }
 
-      await navigator.clipboard.writeText(link);
-      alert("Content link copied to clipboard!");
+      const clipboardSuccess = await copyToClipboard(link);
+
+      if (clipboardSuccess) {
+        alert("Content link copied to clipboard!");
+      } else {
+        alert(`Please copy this link manually: ${link}`);
+      }
     } catch (error) {
       console.error("Failed to copy link:", error);
-      alert("Failed to copy link. Please try again.");
+      alert(`Failed to copy link. Please copy manually: ${link}`);
     }
   };
 
