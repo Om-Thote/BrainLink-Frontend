@@ -40,7 +40,6 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
             case "youtube":
                 const getYouTubeEmbedUrl = (url: string): string => {
                     let videoId = '';
-
                     if (url.includes('watch?v=')) {
                         videoId = url.split('watch?v=')[1].split('&')[0];
                     } else if (url.includes('youtu.be/')) {
@@ -48,10 +47,8 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
                     } else if (url.includes('embed/')) {
                         return url;
                     }
-
                     return `https://www.youtube.com/embed/${videoId}`;
                 };
-
                 return (
                     <iframe
                         className="w-full aspect-video rounded"
@@ -103,8 +100,8 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
     };
 
     return (
-        <div className="w-full sm:w-80 md:w-72 lg:w-80 xl:w-96">
-            <div className="p-3 md:p-4 bg-white rounded-md border-gray-200 border min-h-44 md:min-h-48">
+        <div className="w-full h-full">
+            <div className="p-3 md:p-4 bg-white rounded-md border-gray-200 border h-full flex flex-col">
                 <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center text-sm md:text-base flex-1 min-w-0">
                         <div className="text-gray-500 pr-2 flex-shrink-0">
@@ -133,8 +130,7 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
                         </div>
                     </div>
                 </div>
-
-                <div className="pt-2">
+                <div className="flex-1 overflow-hidden">
                     {renderContent()}
                 </div>
             </div>

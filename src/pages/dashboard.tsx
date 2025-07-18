@@ -271,20 +271,19 @@ export function Dashboard() {
             </div>
           </div>
 
-          {/* Content Grid - Fixed overlapping and spacing issues */}
+          {/* Content Grid - Clean grid layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {filteredContents.map((content, index) => {
               const contentId = content.id || content._id || index.toString();
               return (
-                <div key={contentId} className="w-full min-h-[200px] flex flex-col">
-                  <Card
-                    type={content.type}
-                    link={content.link}
-                    title={content.title}
-                    onDelete={() => handleDelete(contentId)}
-                    onShare={() => handleShareContent(content.link)}
-                  />
-                </div>
+                <Card
+                  key={contentId}
+                  type={content.type}
+                  link={content.link}
+                  title={content.title}
+                  onDelete={() => handleDelete(contentId)}
+                  onShare={() => handleShareContent(content.link)}
+                />
               );
             })}
           </div>
