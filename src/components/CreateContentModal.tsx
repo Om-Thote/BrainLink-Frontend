@@ -116,30 +116,31 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
     if (!open) return null;
 
     return (
-        <div>
+        <div className="fixed inset-0 z-50">
             {/* Backdrop */}
             <div
-                className="w-screen h-screen bg-slate-500 fixed top-0 left-0 opacity-60 flex justify-center z-40"
+                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
                 onClick={onClose}
-            ></div>
-
-            {/* Modal */}
-            <div className="w-screen h-screen fixed top-0 left-0 flex justify-center z-50">
-                <div className="flex flex-col justify-center">
-                    <div className="bg-white opacity-100 p-6 rounded-lg shadow-lg min-w-96 max-w-md">
+            >
+                {/* Modal */}
+                <div
+                    className="bg-white rounded-lg shadow-xl w-full max-w-sm md:max-w-md lg:max-w-lg max-h-[90vh] overflow-y-auto"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="p-4 md:p-6">
                         {/* Header */}
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl pl-35 font-semibold">Add Content</h2>
-                            <div
+                        <div className="flex justify-between items-center mb-4 md:mb-6">
+                            <h2 className="text-lg md:text-xl font-semibold">Add Content</h2>
+                            <button
                                 onClick={onClose}
-                                className="cursor-pointer hover:text-red-500 transition-colors"
+                                className="text-gray-500 hover:text-red-500 transition-colors p-1"
                             >
                                 <CrossIcon />
-                            </div>
+                            </button>
                         </div>
 
                         {/* Form */}
-                        <div className="pl-21 space-y-4">
+                        <div className="space-y-4 mb-6">
                             <Input
                                 reference={titleRef}
                                 placeholder="Enter title"
@@ -153,11 +154,11 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                         </div>
 
                         {/* Content Type Selection */}
-                        <div className="mt-6">
-                            <div className="flex justify-center text-lg pb-3 font-semibold">
-                                <h3>Content Type</h3>
-                            </div>
-                            <div className="flex gap-2 justify-center pb-4 flex-wrap">
+                        <div className="mb-6">
+                            <h3 className="text-base md:text-lg font-semibold text-center mb-4">
+                                Content Type
+                            </h3>
+                            <div className="grid grid-cols-2 gap-2 md:flex md:gap-3 md:justify-center">
                                 <Button
                                     text="YouTube"
                                     variant={type === ContentType.Youtube ? "secondary" : "tertiary"}
@@ -192,6 +193,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                                 variant="primary"
                                 text={isSubmitting ? "Adding..." : "Add Content"}
                                 disabled={isSubmitting}
+                                fullWidth={true}
                             />
                         </div>
                     </div>

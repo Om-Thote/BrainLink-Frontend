@@ -84,10 +84,10 @@ export function SharedBrain() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading shared brain...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600 text-sm md:text-base">Loading shared brain...</p>
                 </div>
             </div>
         );
@@ -95,14 +95,14 @@ export function SharedBrain() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-                <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md">
-                    <div className="text-red-500 text-6xl mb-4">⚠️</div>
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">Oops!</h1>
-                    <p className="text-gray-600 mb-4">{error}</p>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+                <div className="text-center bg-white p-6 md:p-8 rounded-lg shadow-md max-w-md w-full">
+                    <div className="text-red-500 text-4xl md:text-6xl mb-4">⚠️</div>
+                    <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">Oops!</h1>
+                    <p className="text-gray-600 mb-4 text-sm md:text-base">{error}</p>
                     <button
                         onClick={() => window.location.href = "/landing"}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                        className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors text-sm md:text-base"
                     >
                         Go to Home
                     </button>
@@ -112,24 +112,41 @@ export function SharedBrain() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <div className="p-4 max-w-7xl mx-auto">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                        Shared Brain
-                    </h1>
-                    <p className="text-sm text-gray-600">
-                        Viewing shared content ({contents.length} items)
-                    </p>
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <div className="bg-white shadow-sm border-b">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
+                                Shared Brain
+                            </h1>
+                            <p className="text-sm md:text-base text-gray-600 mt-1">
+                                Viewing shared content ({contents.length} items)
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => window.location.href = "/landing"}
+                            className="text-sm md:text-base text-purple-600 hover:text-purple-800 font-medium transition-colors"
+                        >
+                            Go to Home
+                        </button>
+                    </div>
                 </div>
+            </div>
 
+            {/* Content Area */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
                 {contents.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500">
-                        <div className="text-6xl mb-4">📚</div>
-                        <p className="text-lg mb-2">No content found in this shared brain.</p>
+                    <div className="text-center py-12 lg:py-16 text-gray-500">
+                        <div className="text-4xl md:text-6xl mb-4">📚</div>
+                        <p className="text-lg md:text-xl mb-2">No content found in this shared brain.</p>
+                        <p className="text-sm md:text-base">
+                            This brain appears to be empty or the content couldn't be loaded.
+                        </p>
                     </div>
                 ) : (
-                    <div className="flex gap-4 flex-wrap">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                         {contents.map((content, index) => {
                             // Type guard to ensure content.type is valid
                             const validType = ["twitter", "youtube", "blog", "aichat"].includes(content.type)

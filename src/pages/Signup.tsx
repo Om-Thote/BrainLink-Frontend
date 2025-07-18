@@ -24,8 +24,8 @@ export function Signup() {
         setGeneralError("");
 
         try {
-            const username = usernameRef.current?.value;
-            const password = passwordRef.current?.value;
+            const username = usernameRef.current?.value?.trim();
+            const password = passwordRef.current?.value?.trim();
 
             if (!username || !password) {
                 setGeneralError("Please fill in all fields");
@@ -55,6 +55,13 @@ export function Signup() {
         }
     }
 
+    // Handle Enter key press
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !loading) {
+            signup();
+        }
+    };
+
     const getUsernameError = () => {
         return errors.find(error => error.path.includes('username'))?.message;
     };
@@ -64,49 +71,61 @@ export function Signup() {
     };
 
     return (
-        <div className="h-screen w-screen bg-gradient-to-br from-purple-700 via-purple-500 via-pink-500 to-purple-300 flex justify-center items-center">
-            <div className="bg-white rounded-xl min-w-96 max-w-md p-8 shadow-2xl">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">BrainLink</h1>
-                    <h2 className="text-xl font-semibold text-gray-600">Sign In</h2>
+        <div className="min-h-screen w-full bg-gradient-to-br from-purple-700 via-purple-500 via-pink-500 to-purple-300 flex justify-center items-center p-4">
+            <div className="bg-white rounded-xl w-full max-w-md mx-auto p-6 md:p-8 shadow-2xl">
+                <div className="text-center mb-6 md:mb-8">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">BrainLink</h1>
+                    <h2 className="text-lg md:text-xl font-semibold text-gray-600">Sign Up</h2>
                 </div>
 
                 {generalError && (
-                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm md:text-base">
                         {generalError}
                     </div>
                 )}
 
-                <div className=" pl-12 justify-center mb-4">
-                    <Input reference={usernameRef} placeholder="Username" />
-                    {getUsernameError() && (
-                        <p className="text-red-500 text-sm mt-1">{getUsernameError()}</p>
-                    )}
+                <div className="space-y-4 mb-6">
+                    <div>
+                        <Input
+                            reference={usernameRef}
+                            placeholder="Username"
+                            onKeyDown={handleKeyPress}
+                        />
+                        {getUsernameError() && (
+                            <p className="text-red-500 text-sm mt-1">{getUsernameError()}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <Input
+                            reference={passwordRef}
+                            placeholder="Password"
+                            type="password"
+                            onKeyDown={handleKeyPress}
+                        />
+                        {getPasswordError() && (
+                            <p className="text-red-500 text-sm mt-1">{getPasswordError()}</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className="pl-12 justify-center mb-4">
-                    <Input reference={passwordRef} placeholder="Password" type="password" />
-                    {getPasswordError() && (
-                        <p className="text-red-500 text-sm mt-1">{getPasswordError()}</p>
-                    )}
-                </div>
-
-                <div className="flex justify-center pt-4">
+                <div className="mb-6">
                     <Button
                         onClick={signup}
                         loading={loading}
                         variant="primary"
-                        text="Sign Up"
+                        text={loading ? "Signing up..." : "Sign Up"}
                         fullWidth={true}
+                        disabled={loading}
                     />
                 </div>
 
-                <div className="mt-4 text-center">
+                <div className="text-center">
                     <p className="text-sm text-gray-600">
                         Already have an account?{" "}
                         <button
                             onClick={() => navigate("/signin")}
-                            className="text-purple-600 hover:text-purple-800 font-medium"
+                            className="text-purple-600 hover:text-purple-800 font-medium transition-colors"
                         >
                             Sign In
                         </button>

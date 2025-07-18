@@ -54,7 +54,7 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
 
                 return (
                     <iframe
-                        className="w-full aspect-video"
+                        className="w-full aspect-video rounded"
                         src={getYouTubeEmbedUrl(link)}
                         title="YouTube video player"
                         frameBorder="0"
@@ -72,12 +72,12 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
             case "blog":
                 return (
                     <div className="border rounded-lg p-3 bg-gray-50">
-                        <div className="text-sm text-gray-600 mb-2">Blog Post</div>
+                        <div className="text-xs md:text-sm text-gray-600 mb-2">Blog Post</div>
                         <a
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-800 underline block truncate"
+                            className="text-blue-600 hover:text-blue-800 underline block truncate text-sm"
                         >
                             {link}
                         </a>
@@ -86,12 +86,12 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
             case "aichat":
                 return (
                     <div className="border rounded-lg p-3 bg-gradient-to-r from-purple-50 to-blue-50">
-                        <div className="text-sm text-gray-600 mb-2">AI Chat Session</div>
+                        <div className="text-xs md:text-sm text-gray-600 mb-2">AI Chat Session</div>
                         <a
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-purple-600 hover:text-purple-800 underline block truncate"
+                            className="text-purple-600 hover:text-purple-800 underline block truncate text-sm"
                         >
                             {link}
                         </a>
@@ -103,20 +103,20 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
     };
 
     return (
-        <div>
-            <div className="p-4 bg-white rounded-md border-gray-200 max-w-72 border min-h-48 min-w-72">
-                <div className="flex justify-between">
-                    <div className="flex items-center text-md">
-                        <div className="text-gray-500 pr-2">
+        <div className="w-full sm:w-80 md:w-72 lg:w-80 xl:w-96">
+            <div className="p-3 md:p-4 bg-white rounded-md border-gray-200 border min-h-44 md:min-h-48">
+                <div className="flex justify-between items-start mb-3">
+                    <div className="flex items-center text-sm md:text-base flex-1 min-w-0">
+                        <div className="text-gray-500 pr-2 flex-shrink-0">
                             {getTypeIcon(type)}
                         </div>
-                        {title}
+                        <span className="truncate">{title}</span>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center ml-2 flex-shrink-0">
                         <div className="pr-2 text-gray-500">
                             <button
                                 onClick={handleShare}
-                                className="cursor-pointer hover:text-blue-500 transition-colors"
+                                className="cursor-pointer hover:text-blue-500 transition-colors p-1"
                                 title="Share"
                             >
                                 <ShareIcon />
@@ -125,7 +125,7 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
                         <div className="text-gray-500">
                             <button
                                 onClick={handleDelete}
-                                className="cursor-pointer hover:text-red-500 transition-colors"
+                                className="cursor-pointer hover:text-red-500 transition-colors p-1"
                                 title="Delete"
                             >
                                 <DeleteIcon />
@@ -134,7 +134,7 @@ export function Card({ title, link, type, onDelete, onShare }: CardProps) {
                     </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-2">
                     {renderContent()}
                 </div>
             </div>

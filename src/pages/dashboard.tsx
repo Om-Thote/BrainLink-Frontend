@@ -32,10 +32,8 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-
     const successful = document.execCommand('copy');
     document.body.removeChild(textArea);
-
     return successful;
   } catch (err) {
     console.error('Fallback clipboard method failed:', err);
@@ -48,6 +46,7 @@ export function Dashboard() {
   const [sharedBrainHash, setSharedBrainHash] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { contents, filteredContents, activeFilter, refresh, filterContent } = useContent();
 
   useEffect(() => {
@@ -78,10 +77,8 @@ export function Dashboard() {
 
       await refresh();
       alert("Content deleted successfully!");
-
     } catch (error: any) {
       console.error("Failed to delete content:", error);
-
       if (error.response?.data?.errors) {
         const errorMessages = error.response.data.errors.map((err: any) => err.message).join(", ");
         setError(`Validation error: ${errorMessages}`);
@@ -126,7 +123,6 @@ export function Dashboard() {
       }
     } catch (error: any) {
       console.error("Failed to share brain:", error);
-
       if (error.response?.data?.errors) {
         const errorMessages = error.response.data.errors.map((err: any) => err.message).join(", ");
         setError(`Validation error: ${errorMessages}`);
@@ -182,107 +178,150 @@ export function Dashboard() {
   };
 
   return (
-    <div>
-      <Sidebar
-        activeFilter={activeFilter}
-        onFilterChange={filterContent}
-      />
-      <div className="p-4 ml-72 min-h-screen bg-gray-100">
-        <CreateContentModal open={modalOpen} onClose={() => {
-          setModalOpen(false);
-        }} />
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
-            <button
-              onClick={() => setError("")}
-              className="ml-2 text-red-500 hover:text-red-700"
-            >
-              ×
-            </button>
-          </div>
-        )}
+      {/* Sidebar */}
+      <div className={`
+        fixed md:static
+        inset-y-0 left-0
+        z-50 md:z-auto
+        w-64 md:w-72
+        transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:translate-x-0
+        transition-transform duration-300
+        ease-in-out
+      `}>
+        <Sidebar
+          activeFilter={activeFilter}
+          onFilterChange={filterContent}
+        />
+      </div>
 
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">
-              {getDisplayTitle()}
-            </h1>
-            <p className="text-sm text-gray-600 mt-1">
-              {activeFilter === "all"
-                ? `Showing all ${contents.length} items`
-                : `Showing ${filteredContents.length} ${activeFilter} items`
-              }
-            </p>
-          </div>
-
-          <div className="flex gap-4">
-            <Button
-              onClick={() => setModalOpen(true)}
-              variant="primary"
-              text="Add content"
-              startIcon={<PlusIcon />}
-              loading={loading}
-            />
-            <Button
-              onClick={handleShareBrain}
-              variant="primary"
-              text="Share brain"
-              startIcon={<ShareIcon />}
-              loading={loading}
-            />
-          </div>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Mobile Header */}
+        <div className="md:hidden bg-white border-b px-4 py-3 flex items-center justify-between">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg hover:bg-gray-100"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <h1 className="text-lg font-semibold">BrainLink</h1>
+          <div className="w-10" /> {/* Spacer */}
         </div>
 
-        <div className="flex gap-4 flex-wrap">
-          {filteredContents.map((content, index) => {
-            const contentId = content.id || content._id || index.toString();
+        {/* Content Area */}
+        <div className="flex-1 p-4 md:p-6 lg:p-8">
+          <CreateContentModal open={modalOpen} onClose={() => {
+            setModalOpen(false);
+          }} />
 
-            return (
-              <Card
-                key={contentId}
-                type={content.type}
-                link={content.link}
-                title={content.title}
-                onDelete={() => handleDelete(contentId)}
-                onShare={() => handleShareContent(content.link)}
-              />
-            );
-          })}
-        </div>
-
-        {filteredContents.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
-            <div className="text-6xl mb-4">
-              {activeFilter === "all" && "📚"}
-              {activeFilter === "twitter" && "🐦"}
-              {activeFilter === "youtube" && "📺"}
-              {activeFilter === "blog" && "📝"}
-              {activeFilter === "aichat" && "🤖"}
+          {error && (
+            <div className="mb-4 md:mb-6 p-3 md:p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              {error}
+              <button
+                onClick={() => setError("")}
+                className="ml-2 text-red-500 hover:text-red-700"
+              >
+                ×
+              </button>
             </div>
-            <p className="text-lg mb-2">
-              No {activeFilter === "all" ? "" : activeFilter} content found.
-            </p>
-            <p className="text-sm">
-              Click "Add Content" to get started!
-            </p>
-          </div>
-        )}
+          )}
 
-        {sharedBrainHash && (
-          <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded shadow-lg">
-            <p className="text-sm">
-              Brain shared successfully! Hash: {sharedBrainHash}
-            </p>
-            <button
-              onClick={() => setSharedBrainHash(null)}
-              className="ml-2 text-green-500 hover:text-green-700"
-            >
-              ×
-            </button>
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 md:mb-8 gap-4">
+            <div>
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
+                {getDisplayTitle()}
+              </h1>
+              <p className="text-sm md:text-base text-gray-600 mt-1">
+                {activeFilter === "all"
+                  ? `Showing all ${contents.length} items`
+                  : `Showing ${filteredContents.length} ${activeFilter} items`
+                }
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-2 md:gap-4">
+              <Button
+                onClick={() => setModalOpen(true)}
+                variant="primary"
+                text="Add content"
+                startIcon={<PlusIcon />}
+                loading={loading}
+              />
+              <Button
+                onClick={handleShareBrain}
+                variant="primary"
+                text="Share brain"
+                startIcon={<ShareIcon />}
+                loading={loading}
+              />
+            </div>
           </div>
-        )}
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            {filteredContents.map((content, index) => {
+              const contentId = content.id || content._id || index.toString();
+              return (
+                <Card
+                  key={contentId}
+                  type={content.type}
+                  link={content.link}
+                  title={content.title}
+                  onDelete={() => handleDelete(contentId)}
+                  onShare={() => handleShareContent(content.link)}
+                />
+              );
+            })}
+          </div>
+
+          {/* Empty State */}
+          {filteredContents.length === 0 && (
+            <div className="text-center py-12 lg:py-16 text-gray-500">
+              <div className="text-4xl md:text-6xl mb-4">
+                {activeFilter === "all" && "📚"}
+                {activeFilter === "twitter" && "🐦"}
+                {activeFilter === "youtube" && "📺"}
+                {activeFilter === "blog" && "📝"}
+                {activeFilter === "aichat" && "🤖"}
+              </div>
+              <p className="text-lg md:text-xl mb-2">
+                No {activeFilter === "all" ? "" : activeFilter} content found.
+              </p>
+              <p className="text-sm md:text-base">
+                Click "Add Content" to get started!
+              </p>
+            </div>
+          )}
+
+          {/* Success Toast */}
+          {sharedBrainHash && (
+            <div className="fixed bottom-4 right-4 left-4 md:left-auto md:w-auto bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg">
+              <p className="text-sm md:text-base">
+                Brain shared successfully! Hash: {sharedBrainHash}
+              </p>
+              <button
+                onClick={() => setSharedBrainHash(null)}
+                className="ml-2 text-green-500 hover:text-green-700"
+              >
+                ×
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -90,20 +90,20 @@ export function Signin() {
     };
 
     return (
-        <div className="h-screen w-screen bg-gradient-to-br from-purple-700 via-purple-500 via-pink-500 to-purple-300 flex justify-center items-center">
-            <div className="bg-white rounded-xl min-w-96 max-w-md p-8 shadow-2xl">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">BrainLink</h1>
-                    <h2 className="text-xl font-semibold text-gray-600">Sign In</h2>
+        <div className="min-h-screen w-full bg-gradient-to-br from-purple-700 via-purple-500 via-pink-500 to-purple-300 flex justify-center items-center p-4">
+            <div className="bg-white rounded-xl w-full max-w-md mx-auto p-6 md:p-8 shadow-2xl">
+                <div className="text-center mb-6 md:mb-8">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">BrainLink</h1>
+                    <h2 className="text-lg md:text-xl font-semibold text-gray-600">Sign In</h2>
                 </div>
 
                 {generalError && (
-                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm md:text-base">
                         {generalError}
                     </div>
                 )}
 
-                <div className=" pl-12 space-y-4">
+                <div className="space-y-4 mb-6">
                     <div>
                         <Input
                             reference={usernameRef}
@@ -128,7 +128,7 @@ export function Signin() {
                     </div>
                 </div>
 
-                <div className="mt-6">
+                <div className="mb-6">
                     <Button
                         onClick={signin}
                         loading={loading}
@@ -139,7 +139,7 @@ export function Signin() {
                     />
                 </div>
 
-                <div className="mt-6 text-center">
+                <div className="text-center">
                     <p className="text-sm text-gray-600">
                         Don't have an account?{" "}
                         <button
