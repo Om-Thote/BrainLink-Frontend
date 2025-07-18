@@ -192,7 +192,7 @@ export function Dashboard() {
         fixed md:static
         inset-y-0 left-0
         z-50 md:z-auto
-        w-64 md:w-72
+        w-64 md:w-60
         transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         md:translate-x-0
         transition-transform duration-300
@@ -221,7 +221,7 @@ export function Dashboard() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-4 md:p-6 lg:p-8">
+        <div className="flex-1 p-4 md:p-6 lg:p-8 md:pl-8 lg:pl-12">
           <CreateContentModal open={modalOpen} onClose={() => {
             setModalOpen(false);
           }} />

@@ -29,18 +29,17 @@ export function Sidebar({ activeFilter, onFilterChange, isOpen = true, onToggle 
             <div className={`
         fixed left-0 top-0 h-screen bg-white border-r z-50 transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        w-64 md:w-72 lg:w-80
+        w-64 md:w-60
         md:translate-x-0
       `}>
-                <div className="px-4 md:px-6">
+                <div className="px-4 md:px-5">
                     <div className="flex text-xl md:text-2xl pt-6 md:pt-8 items-center">
                         <div className="pr-2 text-purple-600">
                             <Logo />
                         </div>
                         BrainLink
                     </div>
-
-                    <div className="pt-6 md:pt-8 pl-2 md:pl-4">
+                    <div className="pt-6 md:pt-8 pl-2 md:pl-3">
                         <SidebarItem
                             text="All Content"
                             icon={<AllIcon />}
